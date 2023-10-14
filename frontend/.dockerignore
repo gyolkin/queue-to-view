@@ -1,0 +1,10 @@
+.coverage
+.gitignore
+.github
+*.md
+.dockerignore
+Dockerfile
+.eslintrc.cjs
+.prettierrc.json
+node_modules/
+dist/

@@ -1,1 +1,1 @@
-from .main import router as main_router  # noqa
+from .test import router as test_router  # noqa
