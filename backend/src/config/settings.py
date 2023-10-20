@@ -12,6 +12,7 @@ class BackendSettings(BaseSettings):
     )
 
     # APPLICATION
+    INCLUDE_PARSER: bool = False
     TITLE: str = "Default Title"
     VERSION: str = "0.1.0"
     DESCRIPTION: str = "No description."
@@ -25,7 +26,7 @@ class BackendSettings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_SCHEMA: str = "postgresql"
     POSTGRES_USERNAME: str = "postgres"
-    POSTGRES_HOST: str = "database"
+    POSTGRES_HOST: str = "db"
 
     # CORS
     IS_ALLOWED_CREDENTIALS: bool = True

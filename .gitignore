@@ -27,3 +27,4 @@ npm-debug.log*
 *.sln
 *.sw?
 .env
+*.psd

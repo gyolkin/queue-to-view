@@ -1,34 +1,24 @@
-import { useState, type FormEvent } from 'react';
-
-import { useGetTestsQuery, useCreateTestMutation } from '@/features/test/api';
-import { TestCard } from '@/features/test/components';
+import { Heading } from '@/components';
+import { textMap } from '@/constants';
+import { RandomMovie, MovieList } from '@/features/movie/components';
 
 export const HomePage = () => {
-    const [value, setValue] = useState<string>('Hello');
-    const [createTest] = useCreateTestMutation();
-    const { data, isLoading } = useGetTestsQuery();
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        createTest(value);
-    };
-    if (isLoading || !data) {
-        return <div>Данные загружаются...</div>;
-    }
+    const { home } = textMap.pages;
     return (
         <>
-            <form method='POST' className='mb-4' onSubmit={handleSubmit}>
-                <input
-                    type='text'
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
-                <button type='submit'>Create</button>
-            </form>
-            <div className='flex flex-row flex-wrap gap-4 max-w-7xl'>
-                {data.map((item) => (
-                    <TestCard key={item.id} {...item}></TestCard>
-                ))}
-            </div>
+            <section className='pb-12 pt-4 md:pb-16 lg:pb-[100px] lg:pt-6'>
+                <div className='container'>
+                    <RandomMovie />
+                </div>
+            </section>
+            <section className='pb-20 md:pb-24 lg:pb-[120px]'>
+                <div className='container'>
+                    <div className='mb-10 md:mb-12 lg:mb-16 xl:mb-20'>
+                        <Heading>{home.best_films}</Heading>
+                    </div>
+                    <MovieList />
+                </div>
+            </section>
         </>
     );
 };

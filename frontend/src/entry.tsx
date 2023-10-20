@@ -1,4 +1,4 @@
-import '@/ui/base.css';
+import './base.css';
 
 import React from 'react';
 
