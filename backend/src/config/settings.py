@@ -12,6 +12,7 @@ class BackendSettings(BaseSettings):
     )
 
     # APPLICATION
+    SECRET_KEY: str = "secret_key"
     INCLUDE_PARSER: bool = False
     TITLE: str = "Default Title"
     VERSION: str = "0.1.0"
@@ -19,6 +20,7 @@ class BackendSettings(BaseSettings):
     DEBUG: bool = True
     DOCS_URL: str = "/docs"
     API_PREFIX: str = "/api"
+    JWT_LIFETIME: int = 3600
 
     # DATABASE
     POSTGRES_DB: str = "postgres"

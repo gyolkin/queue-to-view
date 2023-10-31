@@ -27,11 +27,10 @@ const headingVariants = cva(
 );
 
 interface HeadingProps
-    extends React.BaseHTMLAttributes<HTMLHeadElement>,
+    extends React.BaseHTMLAttributes<HTMLHeadingElement>,
         VariantProps<typeof headingVariants> {}
 
 export const Heading = ({
-    children,
     variant,
     size,
     className,
@@ -41,8 +40,6 @@ export const Heading = ({
         <h1
             className={cn(headingVariants({ variant, size, className }))}
             {...props}
-        >
-            {children}
-        </h1>
+        />
     );
 };
