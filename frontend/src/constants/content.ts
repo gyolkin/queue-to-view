@@ -1,5 +1,4 @@
 export const textMap = {
-    app_title: 'Queue to View',
     navbar: {
         home: 'Главная',
         genres: 'Жанры',

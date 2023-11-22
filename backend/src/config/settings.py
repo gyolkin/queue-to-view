@@ -20,7 +20,12 @@ class BackendSettings(BaseSettings):
     DEBUG: bool = True
     DOCS_URL: str = "/docs"
     API_PREFIX: str = "/api"
-    JWT_LIFETIME: int = 3600
+
+    # AUTHENTICATION
+    JWT_LIFETIME: int = 60 * 60 * 24 * 7
+    AUTH_COOKIE_NAME: str = "jwt_token"
+    PASSWORD_MIN_LENGTH: int = 5
+    REGISTER_VERIFICATION: bool = False
 
     # DATABASE
     POSTGRES_DB: str = "postgres"
