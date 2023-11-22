@@ -31,6 +31,14 @@
 ```bash
 docker compose --env-file .env up -d
 ```
+<details>
+<summary>Если контейнеры уже развернуты?</summary>
+
+```bash
+docker compose --env-file .env up --force-recreate --build -d
+```
+</details>
+
 Приложение будет развернуто в трех контейнерах: db, backend, frontend, - и доступно на [localhost](http://localhost/).
 
 ## Backend
