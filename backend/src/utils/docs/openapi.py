@@ -13,6 +13,12 @@ def custom_openapi(backend_app: FastAPI) -> Dict[str, Any]:
         version=backend_app.version,
         routes=backend_app.routes,
     )
+    for method in openapi_schema["paths"]:
+        for m in ("get", "delete"):
+            try:
+                del openapi_schema["paths"][method][m]["responses"]["422"]
+            except KeyError:
+                pass
     for schema in list(openapi_schema["components"]["schemas"]):
         if schema == "HTTPValidationError" or schema == "ValidationError":
             del openapi_schema["components"]["schemas"][schema]

@@ -2,11 +2,8 @@ from fastapi import APIRouter, Depends, Request, Response, status
 from fastapi_users import exceptions, schemas
 
 from src.api.dependencies.repository import get_user_repository
-from src.api.dependencies.user import (
-    current_superuser,
-    current_user,
-    get_user_or_404,
-)
+from src.api.dependencies.user import current_superuser, current_user
+from src.api.shortcuts.user import get_user_or_404
 from src.models.db import User
 from src.models.schemas.exceptions import ErrorResponse
 from src.models.schemas.user import UserRead, UserUpdate

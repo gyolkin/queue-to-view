@@ -7,6 +7,6 @@ interface User {
     is_verified: boolean;
 }
 
-export interface ReadonlyUser extends Readonly<Omit<User, 'password'>> {}
+export interface ReadUser extends Readonly<Omit<User, 'password'>> {}
 export interface LoginRequest extends Pick<User, 'email' | 'password'> {}
 export interface RegisterRequest extends Pick<User, 'email' | 'password'> {}

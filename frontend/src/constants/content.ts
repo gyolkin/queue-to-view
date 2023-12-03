@@ -12,7 +12,7 @@ export const textMap = {
     },
     pages: {
         home: {
-            best_films: 'Лучшие фильмы',
+            latest_films: 'Последние фильмы',
         },
         not_found: {
             title: '404',

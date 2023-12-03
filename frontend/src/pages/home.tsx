@@ -14,7 +14,7 @@ export const HomePage = () => {
             <section className='pb-20 md:pb-24 lg:pb-[120px]'>
                 <div className='container'>
                     <div className='mb-10 md:mb-12 lg:mb-16 xl:mb-20'>
-                        <Heading>{home.best_films}</Heading>
+                        <Heading>{home.latest_films}</Heading>
                     </div>
                     <MovieList />
                 </div>

@@ -5,5 +5,5 @@ export {
     useLogoutMutation,
     authApi,
 } from './api';
-export type { ReadonlyUser, LoginRequest, RegisterRequest } from './types';
 export { userSlice, selectIsAuthenticated } from './slice';
+export type { ReadUser, LoginRequest, RegisterRequest } from './types';

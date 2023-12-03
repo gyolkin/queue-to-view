@@ -1,17 +1,13 @@
 import { apiMap } from '@/constants';
 import { baseApi } from '@/core/api';
-import type {
-    LoginRequest,
-    RegisterRequest,
-    ReadonlyUser,
-} from '@/features/user';
+import type { LoginRequest, RegisterRequest, ReadUser } from '@/features/user';
 
 const { base_url: auth_base_url, login, register, logout } = apiMap.auth;
 const { base_url: user_base_url, me } = apiMap.user;
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        register: build.mutation<ReadonlyUser, RegisterRequest>({
+        register: build.mutation<ReadUser, RegisterRequest>({
             query: (credentials) => ({
                 url: auth_base_url + register,
                 method: 'POST',
@@ -31,7 +27,7 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'POST',
             }),
         }),
-        me: build.query<ReadonlyUser, void>({
+        me: build.query<ReadUser, void>({
             query: () => ({
                 url: user_base_url + me,
                 method: 'GET',
