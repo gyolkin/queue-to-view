@@ -6,17 +6,22 @@ from sqlalchemy.ext.asyncio import AsyncSession as SQLAlchemyAsyncSession
 
 from src.api.dependencies.session import get_async_session
 from src.models.db import User
-from src.repository.crud import BaseCRUDRepository, UserCRUDRepository
+from src.repository.crud import (
+    BaseCRUDRepository,
+    DBModelType,
+    UserCRUDRepository,
+)
 
 
 def get_repository(
-    repo_type: Type[BaseCRUDRepository],
+    repo_type: Type[BaseCRUDRepository], repo_model: Type[DBModelType]
 ) -> Callable[[SQLAlchemyAsyncSession], BaseCRUDRepository]:
     """
     Зависимость для получения репозитория конкретной модели.
 
     params:
         repo_type: Тип репозитория, который необходимо создать. Должен наследоваться от BaseCRUDRepository.
+        repo_model: Модель
     result:
         Функция, которая принимает асинхронную сессию SQLAlchemy и возвращает экземпляр репозитория указанного типа.
     """
@@ -24,7 +29,7 @@ def get_repository(
     def _get_repo(
         async_session: SQLAlchemyAsyncSession = Depends(get_async_session),
     ) -> BaseCRUDRepository:
-        return repo_type(async_session=async_session)
+        return repo_type(async_session, repo_model)
 
     return _get_repo
 

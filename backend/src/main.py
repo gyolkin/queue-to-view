@@ -1,6 +1,7 @@
 from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from src.api.endpoints import router
 from src.config.events import (
@@ -22,12 +23,11 @@ def initialize_backend_application() -> FastAPI:
             }
         }
     )
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.ALLOWED_ORIGINS,
-        allow_credentials=settings.IS_ALLOWED_CREDENTIALS,
-        allow_methods=settings.ALLOWED_METHODS,
-        allow_headers=settings.ALLOWED_HEADERS,
+    app.add_middleware(CORSMiddleware, **settings.set_backend_app_cors)
+    app.mount(
+        "/" + settings.STATIC_FOLDER,
+        StaticFiles(directory=settings.get_static_folder_path),
+        name=settings.STATIC_FOLDER,
     )
     app.add_event_handler(
         "startup",

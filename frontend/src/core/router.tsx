@@ -8,6 +8,7 @@ import {
     LoginPage,
     RegisterPage,
     ProfilePage,
+    MoviePage,
 } from '@/pages';
 import { ProtectedRoute } from '@/utils/protected-route';
 
@@ -40,6 +41,10 @@ export const Router = () => {
                                 <ProfilePage />
                             </ProtectedRoute>
                         }
+                    />
+                    <Route
+                        path={`${routerMap.movie}/:movieSlug`}
+                        element={<MoviePage />}
                     />
                 </Route>
                 <Route element={<BasicLayout />}>
