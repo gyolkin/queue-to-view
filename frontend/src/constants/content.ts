@@ -1,5 +1,4 @@
 export const textMap = {
-    app_title: 'Queue to View',
     navbar: {
         home: 'Главная',
         genres: 'Жанры',
@@ -13,7 +12,7 @@ export const textMap = {
     },
     pages: {
         home: {
-            best_films: 'Лучшие фильмы',
+            latest_films: 'Последние фильмы',
         },
         not_found: {
             title: '404',

@@ -12,9 +12,9 @@
 ## Описание проекта
 **Queue to View** — это не просто еще один веб-каталог с фильмами. Это место, где кинолюбители любых интересов смогут планировать походы в кинотеатры или просмотр фильмов дома, общаться с единомышленниками и всегда найти ответ на вопрос: а что сегодня посмотреть?
 
-<div style="text-align: center;">
+<p align="center">
     <img style="text-align:center" src="./frontend/src/assets/qtv-small.png" alt="Project Logo">
-</div>
+</p>
 
 У нас вы найдете:
 
@@ -31,6 +31,14 @@
 ```bash
 docker compose --env-file .env up -d
 ```
+<details>
+<summary>Если контейнеры уже развернуты?</summary>
+
+```bash
+docker compose --env-file .env up --force-recreate --build -d
+```
+</details>
+
 Приложение будет развернуто в трех контейнерах: db, backend, frontend, - и доступно на [localhost](http://localhost/).
 
 ## Backend
