@@ -1,8 +1,8 @@
 from sqlalchemy import (
     CheckConstraint,
     DateTime,
+    Enum,
     Float,
-    ForeignKey,
     Integer,
     String,
     desc,
@@ -11,6 +11,7 @@ from sqlalchemy.orm import mapped_column, relationship
 from sqlalchemy.sql import functions
 
 from src.config.manager import constants
+from src.models.schemas.country import Country
 from src.repository.table import AutoincrementIDMixin, Base
 
 
@@ -26,14 +27,11 @@ class Movie(Base, AutoincrementIDMixin):
     duration = mapped_column(Integer, nullable=False)
     imdb_rating = mapped_column(Float, nullable=True)
     poster = mapped_column(String, nullable=True, default="default.jpg")
-    country_id = mapped_column(
-        ForeignKey("country.id", ondelete="CASCADE"), nullable=False
-    )
+    country = mapped_column(Enum(Country), nullable=False)
     created_at = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=functions.now()
     )
 
-    country = relationship("Country", back_populates="movie", lazy="joined")
     genres = relationship(
         "Genre",
         secondary="movie_genre",

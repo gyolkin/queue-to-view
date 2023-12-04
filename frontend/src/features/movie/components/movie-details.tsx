@@ -31,7 +31,7 @@ export const MovieDetails = ({ movie }: { movie: ReadMovie }) => {
                     </div>
                     <div className='mb-6 lg:mb-10'>{movie.description}</div>
                     <Table>
-                        <TableRow name='Страна' value={movie.country.title} />
+                        <TableRow name='Страна' value={movie.country} />
                         <TableRow
                             name='Год выпуска'
                             value={movie.release_year}

@@ -3,7 +3,6 @@ from typing import Type
 from sqlalchemy import Integer, MetaData
 from sqlalchemy.orm import (
     DeclarativeBase,
-    Mapped,
     declared_attr,
     mapped_column,
 )

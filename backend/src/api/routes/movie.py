@@ -2,22 +2,14 @@ from fastapi import APIRouter, Depends, status
 
 from src.api.dependencies.repository import get_repository
 from src.api.dependencies.user import current_superuser
-from src.api.shortcuts import (
-    get_country_or_404,
-    get_genres_from_id_list_or_404,
-    get_movie_or_404,
-)
-from src.models.db import Country, Genre, Movie
+from src.api.shortcuts import get_genres_from_id_list_or_404, get_movie_or_404
+from src.models.db import Genre, Movie
 from src.models.schemas.movie import (
     MovieCreate,
     MovieDetailedRead,
     MovieUpdate,
 )
-from src.repository.crud import (
-    CountryCRUDRepository,
-    GenreCRUDRepository,
-    MovieCRUDRepository,
-)
+from src.repository.crud import GenreCRUDRepository, MovieCRUDRepository
 from src.utils.docs import create_movie_details
 
 router = APIRouter(prefix="/movie", tags=["movie"])
@@ -49,14 +41,10 @@ async def create_movie(
     movie_repo: MovieCRUDRepository = Depends(
         get_repository(MovieCRUDRepository, Movie)
     ),
-    country_repo: CountryCRUDRepository = Depends(
-        get_repository(CountryCRUDRepository, Country)
-    ),
     genre_repo: GenreCRUDRepository = Depends(
         get_repository(GenreCRUDRepository, Genre)
     ),
 ):
-    await get_country_or_404(movie_create.country_id, country_repo)
     genres = await get_genres_from_id_list_or_404(
         movie_create.genres, genre_repo
     )
@@ -86,15 +74,10 @@ async def update_movie(
     movie_repo: MovieCRUDRepository = Depends(
         get_repository(MovieCRUDRepository, Movie)
     ),
-    country_repo: CountryCRUDRepository = Depends(
-        get_repository(CountryCRUDRepository, Country)
-    ),
     genre_repo: GenreCRUDRepository = Depends(
         get_repository(GenreCRUDRepository, Genre)
     ),
 ):
-    if movie_update.country_id:
-        await get_country_or_404(movie_update.country_id, country_repo)
     genres = (
         await get_genres_from_id_list_or_404(movie_update.genres, genre_repo)
         if movie_update.genres

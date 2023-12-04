@@ -39,7 +39,7 @@ export const MovieSingle = ({ movie }: { movie: ReadMovie }) => {
                     </h3>
                     <ul className='flex flex-col gap-y-1.5 text-sm leading-none font-medium'>
                         <li>{joinGenres(movie.genres)}</li>
-                        <li className='text-accent'>{movie.country.title}</li>
+                        <li className='text-accent'>{movie.country}</li>
                     </ul>
                 </div>
             </div>
