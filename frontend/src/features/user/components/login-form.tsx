@@ -1,20 +1,15 @@
-import Cookies from 'js-cookie';
 import { Form, Field } from 'react-final-form';
 
 import { Button, Input } from '@/components';
-import { configMap } from '@/constants';
 import { authApi, useLoginMutation, type LoginRequest } from '@/features/user';
 import { getErrorMessage } from '@/utils/helpers';
 import { required } from '@/utils/validators';
 
 export const LoginForm = () => {
-    const { name: cookie_name, expires: cookie_expires } =
-        configMap.auth_cookie;
     const [login, { isLoading, isError, error }] = useLoginMutation();
     const [refetch] = authApi.endpoints.me.useLazyQuerySubscription();
     const onSubmit = async (values: LoginRequest) => {
         await login(values).unwrap();
-        Cookies.set(cookie_name, 'true', { expires: cookie_expires });
         refetch();
     };
     return (
