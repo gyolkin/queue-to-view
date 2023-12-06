@@ -12,5 +12,6 @@ export const apiMap = {
     },
     movie: {
         base_url: '/movie',
+        random: '/random-movie',
     },
 };

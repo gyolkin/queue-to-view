@@ -22,11 +22,13 @@ export const textMap = {
     },
     features: {
         random_movie: {
-            init_heading1: 'Доверьтесь',
-            init_heading2: 'силе рандома',
-            desc: 'Фильмов много бла-бла. Мы выберем для вас случайный из нашей библиотеки. Доверьтесь силе рандома!',
-            gen_heading1: 'Для вас',
-            gen_button_details: 'Подробнее',
+            banner_heading: 'Доверьтесь рандому!',
+            banner_smalltext: 'Не знаете, что посмотреть?',
+            banner_text:
+                'Мы выберем для вас абсолютно случайный фильм. Возможно, вам повезет!',
+            film_details_link: 'Читать подробнее...',
+            button_first_trigger: 'Мне повезет!',
+            button_next_trigger: 'Еще раз!',
         },
     },
 };

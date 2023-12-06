@@ -2,7 +2,7 @@ import { apiMap } from '@/constants';
 import { baseApi } from '@/core/api';
 import type { ReadMovie } from '@/features/movie';
 
-const { base_url: movie_base_url } = apiMap.movie;
+const { base_url: movie_base_url, random: random_movie } = apiMap.movie;
 
 export const movieApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -18,7 +18,14 @@ export const movieApi = baseApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        randomMovie: build.query<ReadMovie, void>({
+            query: () => ({
+                url: movie_base_url + random_movie,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
-export const { useAllMoviesQuery, useSingleMovieQuery } = movieApi;
+export const { useAllMoviesQuery, useSingleMovieQuery, useRandomMovieQuery } =
+    movieApi;
