@@ -1,11 +1,7 @@
 from typing import Type
 
 from sqlalchemy import Integer, MetaData
-from sqlalchemy.orm import (
-    DeclarativeBase,
-    declared_attr,
-    mapped_column,
-)
+from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column
 
 
 class CreateTableName:

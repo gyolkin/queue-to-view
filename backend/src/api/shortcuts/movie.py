@@ -28,3 +28,24 @@ async def get_movie_or_404(
         return await movie_repo.read_one(movie_slug, by_field="slug")
     except EntityNotExists as e:
         raise await http_exc_404_movie_not_exist(str(e))
+
+
+async def get_random_movie_or_404(
+    movie_repo: MovieCRUDRepository = Depends(
+        get_repository(MovieCRUDRepository, Movie)
+    ),
+) -> Movie:
+    """
+    Зависимость для получения случайного фильма из БД.
+
+    params:
+        movie_repo: Объект MovieCRUDRepository
+    result:
+        Объект Movie.
+    exc:
+        Вызывает HTTPException, если ни один фильм не найден в БД.
+    """
+    try:
+        return await movie_repo.read_random_one()
+    except EntityNotExists as e:
+        raise await http_exc_404_movie_not_exist(str(e))

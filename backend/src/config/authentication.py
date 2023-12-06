@@ -17,7 +17,9 @@ from src.models.db import User
 
 
 class CustomCookieTransport(CookieTransport):
-    def __init__(self, *args, additional_cookie_name: str = "logged_in", **kwargs):
+    def __init__(
+        self, *args, additional_cookie_name: str = "logged_in", **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.additional_cookie_name = additional_cookie_name
 

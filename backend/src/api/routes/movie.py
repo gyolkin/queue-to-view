@@ -2,7 +2,11 @@ from fastapi import APIRouter, Depends, status
 
 from src.api.dependencies.repository import get_repository
 from src.api.dependencies.user import current_superuser
-from src.api.shortcuts import get_genres_from_id_list_or_404, get_movie_or_404
+from src.api.shortcuts import (
+    get_genres_from_id_list_or_404,
+    get_movie_or_404,
+    get_random_movie_or_404,
+)
 from src.models.db import Genre, Movie
 from src.models.schemas.movie import (
     MovieCreate,
@@ -13,6 +17,17 @@ from src.repository.crud import GenreCRUDRepository, MovieCRUDRepository
 from src.utils.docs import create_movie_details
 
 router = APIRouter(prefix="/movie", tags=["movie"])
+
+
+@router.get(
+    "/random-movie",
+    response_model=MovieDetailedRead,
+    summary="Получение случайного фильма из базы данных",
+)
+async def get_random_movie(
+    random_movie: Movie = Depends(get_random_movie_or_404),
+):
+    return random_movie
 
 
 @router.get(

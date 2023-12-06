@@ -1,14 +1,25 @@
 from typing import Optional, Sequence
 
+import sqlalchemy
 from fastapi import encoders
+from sqlalchemy.sql import func
 
 from src.models.db import Genre, Movie
 from src.models.schemas.movie import MovieCreate, MovieUpdate
 from src.repository.crud.base import BaseCRUDRepository
+from src.utils.exceptions.database import EntityNotExists
 from src.utils.tools import create_image_from_bytes, generate_slug
 
 
 class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
+    async def read_random_one(self) -> Movie:
+        stmt = sqlalchemy.select(Movie).order_by(func.random())
+        query = await self.async_session.execute(statement=stmt)
+        result = query.scalars().first()
+        if result is None:
+            raise EntityNotExists("random")
+        return result
+
     async def create(
         self, input_object: MovieCreate, genres: Sequence[Genre]
     ) -> Movie:
