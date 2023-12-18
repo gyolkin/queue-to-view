@@ -1,13 +1,15 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, status
 
 from src.api.dependencies.repository import get_repository
-from src.api.dependencies.user import current_superuser
+from src.api.dependencies.user import current_superuser, current_user_optional
 from src.api.shortcuts import (
     get_genres_from_id_list_or_404,
     get_movie_or_404,
     get_random_movie_or_404,
 )
-from src.models.db import Genre, Movie
+from src.models.db import Genre, Movie, User
 from src.models.schemas.movie import (
     MovieCreate,
     MovieDetailedRead,
@@ -17,6 +19,21 @@ from src.repository.crud import GenreCRUDRepository, MovieCRUDRepository
 from src.utils.docs import create_movie_details
 
 router = APIRouter(prefix="/movie", tags=["movie"])
+
+
+@router.get(
+    "",
+    response_model=list[MovieDetailedRead],
+    summary="Получение списка всех фильмов",
+)
+async def get_movies(
+    movie_repo: MovieCRUDRepository = Depends(
+        get_repository(MovieCRUDRepository, Movie)
+    ),
+    user: Optional[User] = Depends(current_user_optional),
+):
+    db_movies = await movie_repo.read_all(user=user)
+    return db_movies
 
 
 @router.get(
@@ -31,17 +48,12 @@ async def get_random_movie(
 
 
 @router.get(
-    "",
-    response_model=list[MovieDetailedRead],
-    summary="Получение списка всех фильмов",
+    "/{movie_slug}",
+    response_model=MovieDetailedRead,
+    summary="Получение конкретного фильма по slug",
 )
-async def get_movies(
-    movie_repo: MovieCRUDRepository = Depends(
-        get_repository(MovieCRUDRepository, Movie)
-    ),
-):
-    db_movies = await movie_repo.read_all()
-    return db_movies
+async def get_movie(db_movie: Movie = Depends(get_movie_or_404)):
+    return db_movie
 
 
 @router.post(
@@ -65,15 +77,6 @@ async def create_movie(
     )
     new_movie = await movie_repo.create(movie_create, genres)
     return new_movie
-
-
-@router.get(
-    "/{movie_slug}",
-    response_model=MovieDetailedRead,
-    summary="Получение конкретного фильма по slug",
-)
-async def get_movie(db_movie: Movie = Depends(get_movie_or_404)):
-    return db_movie
 
 
 @router.patch(

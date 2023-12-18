@@ -1,7 +1,10 @@
+from typing import Optional
+
 from fastapi import Depends
 
 from src.api.dependencies.repository import get_repository
-from src.models.db import Movie
+from src.api.dependencies.user import current_user_optional
+from src.models.db import Movie, User
 from src.repository.crud import MovieCRUDRepository
 from src.utils.exceptions.database import EntityNotExists
 from src.utils.exceptions.http import http_exc_404_movie_not_exist
@@ -12,20 +15,14 @@ async def get_movie_or_404(
     movie_repo: MovieCRUDRepository = Depends(
         get_repository(MovieCRUDRepository, Movie)
     ),
+    user: Optional[User] = Depends(current_user_optional),
 ) -> Movie:
-    """
-    Зависимость для проверки существования фильма в БД (по slug).
-
-    params:
-        movie_slug: Значение уникального идентификатора фильма (slug).
-        movie_repo: Объект MovieCRUDRepository
-    result:
-        Объект Movie.
-    exc:
-        Вызывает HTTPException, если slug фильма не найден в БД.
-    """
+    """ """
     try:
-        return await movie_repo.read_one(movie_slug, by_field="slug")
+        db_movie = await movie_repo.read_one(
+            user=user, by_field="slug", value=movie_slug
+        )
+        return db_movie
     except EntityNotExists as e:
         raise await http_exc_404_movie_not_exist(str(e))
 
@@ -34,18 +31,8 @@ async def get_random_movie_or_404(
     movie_repo: MovieCRUDRepository = Depends(
         get_repository(MovieCRUDRepository, Movie)
     ),
+    user: Optional[User] = Depends(current_user_optional),
 ) -> Movie:
-    """
-    Зависимость для получения случайного фильма из БД.
-
-    params:
-        movie_repo: Объект MovieCRUDRepository
-    result:
-        Объект Movie.
-    exc:
-        Вызывает HTTPException, если ни один фильм не найден в БД.
-    """
-    try:
-        return await movie_repo.read_random_one()
-    except EntityNotExists as e:
-        raise await http_exc_404_movie_not_exist(str(e))
+    """ """
+    random_movie = await movie_repo.read_one(user=user)
+    return random_movie

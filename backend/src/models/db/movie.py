@@ -39,6 +39,8 @@ class Movie(Base, AutoincrementIDMixin):
         lazy="selectin",
     )
 
+    is_watched = False
+
     __table_args__ = (
         CheckConstraint(
             f"release_year >= {constants.MIN_RELEASE_YEAR} AND release_year <= {constants.MAX_RELEASE_YEAR}"
