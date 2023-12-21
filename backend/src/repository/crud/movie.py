@@ -1,9 +1,10 @@
-from typing import Optional, Sequence
+from typing import Any, Optional, Sequence
 from uuid import UUID
 
 from fastapi import encoders
+from sqlalchemy import Label
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import and_, func, select
+from sqlalchemy.sql import and_, case, func, select
 
 from src.models.db import Genre, Movie, WatchList
 from src.models.schemas.movie import MovieCreate, MovieUpdate
@@ -13,6 +14,26 @@ from src.utils.tools import create_image_from_bytes, generate_slug
 
 
 class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
+    async def read_all(
+        self, session: AsyncSession, user_id: Optional[UUID] = None, hide_watched: bool = False
+    ) -> Sequence[Movie]:
+        stmt = select(Movie, self._is_watched_stmt).outerjoin(
+            WatchList,
+            and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
+        )
+
+        query = await session.execute(stmt)
+        results = query.unique().all()
+
+        movies = []
+        for movie, is_watched in results:
+            if hide_watched and not is_watched:
+                movies.append(movie)
+            if not hide_watched:
+                movie.is_watched = is_watched
+                movies.append(movie)
+        return movies
+
     async def read_one(
         self,
         session: AsyncSession,
@@ -20,45 +41,24 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
         value: Optional[str | int] = None,
         user_id: Optional[UUID] = None,
     ) -> Movie:
-        stmt = select(Movie)
+        stmt = select(Movie, self._is_watched_stmt).outerjoin(
+            WatchList,
+            and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
+        )
+
         if by_field and value:
             stmt = stmt.where(getattr(Movie, by_field) == value)
         else:
             stmt = stmt.order_by(func.random())
-        query = await session.execute(stmt)
-        movie = query.scalars().first()
 
-        if not movie:
+        query = await session.execute(stmt)
+        result = query.unique().first()
+        if not result:
             raise EntityNotExists(value)
 
-        if user_id:
-            watched_stmt = select(WatchList.movie_id).where(
-                and_(
-                    WatchList.movie_id == movie.id,
-                    WatchList.user_id == user_id,
-                )
-            )
-            watched_query = await session.execute(watched_stmt)
-            movie.is_watched = watched_query.scalar() is not None
+        movie, is_watched = result
+        movie.is_watched = is_watched
         return movie
-
-    async def read_all(
-        self, session: AsyncSession, user_id: Optional[UUID] = None
-    ) -> Sequence[Movie]:
-        stmt = select(Movie)
-        query = await session.execute(stmt)
-        movies = query.scalars().all()
-
-        if user_id:
-            # todo: optimize
-            watched_stmt = select(WatchList.movie_id).where(
-                WatchList.user_id == user_id
-            )
-            watched_query = await session.execute(watched_stmt)
-            watched_movie_ids = {row[0] for row in watched_query.fetchall()}
-            for movie in movies:
-                movie.is_watched = movie.id in watched_movie_ids
-        return movies
 
     async def create(
         self,
@@ -106,6 +106,12 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
         await session.commit()
         await session.refresh(db_object)
         return db_object
+
+    @property
+    def _is_watched_stmt(self) -> Label[Any]:
+        return case((WatchList.movie_id != None, True), else_=False).label(
+            "is_watched"
+        )
 
 
 movie_repo: MovieCRUDRepository = MovieCRUDRepository(Movie)

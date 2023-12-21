@@ -23,7 +23,7 @@ async def add_to_watchlist(
     session: AsyncSession = Depends(get_async_session),
     db_movie: Movie = Depends(get_movie_or_404),
     user: User = Depends(current_user),
-) -> None:
+):
     is_watched = await watched_repo.read_by_movie_id(
         session=session, user_id=user.id, movie_id=db_movie.id
     )
@@ -44,7 +44,7 @@ async def delete_from_watchlist(
     session: AsyncSession = Depends(get_async_session),
     db_movie: Movie = Depends(get_movie_or_404),
     user: User = Depends(current_user),
-) -> None:
+):
     is_watched = await watched_repo.read_by_movie_id(
         session=session, user_id=user.id, movie_id=db_movie.id
     )

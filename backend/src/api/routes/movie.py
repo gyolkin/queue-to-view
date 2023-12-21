@@ -29,11 +29,14 @@ router = APIRouter(prefix="/movie", tags=["movie"])
     openapi_extra={"security": None},
 )
 async def get_movies(
+    hide_watched: bool = False,
     session: AsyncSession = Depends(get_async_session),
     user: Optional[User] = Depends(current_user_optional),
 ):
     db_movies = await movie_repo.read_all(
-        session=session, user_id=user.id if user else None
+        session=session,
+        user_id=user.id if user else None,
+        hide_watched=hide_watched
     )
     return db_movies
 
