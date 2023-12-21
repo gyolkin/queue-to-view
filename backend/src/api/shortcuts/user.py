@@ -8,7 +8,8 @@ from src.utils.exceptions.http import http_exc_404_user_not_exist
 
 
 async def get_user_or_404(
-    id: str, user_manager: UserCRUDRepository = Depends(get_user_repository)
+    user_id: str,
+    user_manager: UserCRUDRepository = Depends(get_user_repository),
 ) -> User:
     """
     Зависимость для проверки существования пользователя в БД (по id).
@@ -20,7 +21,7 @@ async def get_user_or_404(
         Объект User.
     """
     try:
-        parsed_id = user_manager.parse_id(id)
+        parsed_id = user_manager.parse_id(user_id)
         return await user_manager.get(parsed_id)
     except (exceptions.UserNotExists, exceptions.InvalidID):
         raise await http_exc_404_user_not_exist()

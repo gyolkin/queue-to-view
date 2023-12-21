@@ -34,7 +34,7 @@ class Movie(Base, AutoincrementIDMixin):
 
     genres = relationship(
         "Genre",
-        secondary="movie_genre",
+        secondary="moviegenre",
         back_populates="movie",
         lazy="selectin",
     )

@@ -1,4 +1,4 @@
-from typing import Generic, Optional, Sequence, Type, TypeVar
+from typing import Generic, Sequence, Type, TypeVar
 
 import sqlalchemy
 from fastapi import encoders
@@ -16,55 +16,59 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseSchemaModel)
 class BaseCRUDRepository(
     Generic[DBModelType, CreateSchemaType, UpdateSchemaType]
 ):
-    def __init__(self, async_session: AsyncSession, model: Type[DBModelType]):
-        self.async_session = async_session
+    def __init__(self, model: Type[DBModelType]):
         self.model = model
 
-    async def create(self, input_object: CreateSchemaType) -> DBModelType:
+    async def create(
+        self, session: AsyncSession, input_object: CreateSchemaType
+    ) -> DBModelType:
         db_object = self.model(**input_object.model_dump())
-        self.async_session.add(db_object)
-        await self.async_session.commit()
-        await self.async_session.refresh(db_object)
+        session.add(db_object)
+        await session.commit()
+        await session.refresh(db_object)
         return db_object
 
-    async def read_all(self) -> Sequence[DBModelType]:
+    async def read_all(self, session: AsyncSession) -> Sequence[DBModelType]:
         stmt = sqlalchemy.select(self.model)
-        query = await self.async_session.execute(statement=stmt)
+        query = await session.execute(statement=stmt)
         return query.scalars().all()
 
     async def read_one(
         self,
+        session: AsyncSession,
         value: str | int,
         by_field: str = "id",
     ) -> DBModelType:
         stmt = sqlalchemy.select(self.model).filter(
             getattr(self.model, by_field) == value
         )
-        query = await self._read(statement=stmt)
-        if query is None:
+        query = await session.execute(statement=stmt)
+        result = query.unique().scalar_one_or_none()
+
+        if result is None:
             raise EntityNotExists(value)
-        return query
+
+        return result
 
     async def update(
-        self, db_object: DBModelType, input_object: UpdateSchemaType
+        self,
+        session: AsyncSession,
+        db_object: DBModelType,
+        input_object: UpdateSchemaType,
     ) -> DBModelType:
         current_data = encoders.jsonable_encoder(db_object)
         update_data = input_object.model_dump(exclude_unset=True)
         for field in current_data:
             if field in update_data:
                 setattr(db_object, field, update_data[field])
-        self.async_session.add(db_object)
-        await self.async_session.commit()
-        await self.async_session.refresh(db_object)
+        session.add(db_object)
+        await session.commit()
+        await session.refresh(db_object)
         return db_object
 
-    async def delete(self, db_object: DBModelType) -> None:
-        await self.async_session.delete(db_object)
-        await self.async_session.commit()
+    async def delete(
+        self, session: AsyncSession, db_object: DBModelType
+    ) -> None:
+        await session.delete(db_object)
+        await session.commit()
         return None
-
-    async def _read(
-        self, statement: sqlalchemy.Select
-    ) -> Optional[DBModelType]:
-        query = await self.async_session.execute(statement)
-        return query.unique().scalar_one_or_none()

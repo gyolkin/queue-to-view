@@ -82,7 +82,7 @@ async def update_me(
 
 
 @router.get(
-    "/{id}",
+    "/{user_id}",
     response_model=UserRead,
     summary="Получение информации о пользователе по id",
     responses={
@@ -102,7 +102,7 @@ async def get_user(user: User = Depends(get_user_or_404)):
 
 
 @router.patch(
-    "/{id}",
+    "/{user_id}",
     response_model=UserRead,
     dependencies=[Depends(current_superuser)],
     summary="Обновление информации о пользователе по id (для админа)",
@@ -161,7 +161,7 @@ async def update_user(
 
 
 @router.delete(
-    "/{id}",
+    "/{user_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     response_class=Response,
     dependencies=[Depends(current_superuser)],

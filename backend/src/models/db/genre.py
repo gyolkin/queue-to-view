@@ -12,5 +12,5 @@ class Genre(Base, AutoincrementIDMixin):
     )
 
     movie = relationship(
-        "Movie", secondary="movie_genre", back_populates="genres"
+        "Movie", secondary="moviegenre", back_populates="genres"
     )
