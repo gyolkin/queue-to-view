@@ -33,6 +33,7 @@ python-dotenv = "^1.0.0"
 python-slugify = "^8.0.1"
 aiofiles = "^23.2.1"
 sqlalchemy = "2.0.0"
+scrapy = "^2.11.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"
