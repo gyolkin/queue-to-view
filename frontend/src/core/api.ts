@@ -14,6 +14,6 @@ export const baseApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: base_url,
     }),
-    tagTypes: ['User'],
+    tagTypes: ['Movie'],
     endpoints: () => ({}),
 });
