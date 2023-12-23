@@ -35,19 +35,15 @@ class ParserPipeline:
         if 'poster' in item:
             base64_image = convert_image_to_base64(item['poster'])
             if base64_image:
-                # Заменяем URL постера на его строку base64
                 item['poster'] = base64_image
             else:
                 logging.warning(f"Base64 conversion failed for: {item['poster']}")
-                # Если преобразование не удалось, удаляем поле 'poster'
                 del item['poster']
         return item
     
     def convert_duration_to_minutes(self, duration_str):
-        # Регулярное выражение для поиска часов и минут
         match = re.search(r'(?:(\d+)h)?\s*(?:(\d+)m)?', duration_str)
         if match:
-            # Преобразование найденных значений в минуты
             hours = int(match.group(1)) if match.group(1) else 0
             minutes = int(match.group(2)) if match.group(2) else 0
             return hours * 60 + minutes
