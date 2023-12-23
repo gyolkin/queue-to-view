@@ -1,7 +1,7 @@
 import scrapy
 
 
-class Movie(scrapy.Item):
+class MovieItem(scrapy.Item):
     title = scrapy.Field()
     description = scrapy.Field()
     release_year = scrapy.Field()
@@ -10,4 +10,3 @@ class Movie(scrapy.Item):
     genres = scrapy.Field()
     imdb_rating = scrapy.Field()
     poster = scrapy.Field()
-   
