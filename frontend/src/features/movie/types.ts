@@ -16,5 +16,4 @@ export interface ReadMovie extends Readonly<Omit<Movie, 'genres'>> {
     readonly slug: string;
     readonly created_at: string;
     readonly genres: Array<ReadGenre>;
-    readonly is_watched: boolean;
 }

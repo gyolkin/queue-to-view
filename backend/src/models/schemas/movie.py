@@ -63,7 +63,6 @@ class MovieDetailedRead(MovieBase):
     country: Country
     genres: list["GenreRead"]
     poster: str
-    is_watched: bool = False
 
     @field_validator("poster")
     def convert_poster_url(cls, v: str) -> str:

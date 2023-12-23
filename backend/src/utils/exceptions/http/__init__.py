@@ -1,8 +1,6 @@
 from .exc_400 import (
-    http_exc_400_already_added_to_watchlist,
     http_exc_400_invalid_credentials,
     http_exc_400_invalid_password,
-    http_exc_400_not_added_to_watchlist,
     http_exc_400_not_verified,
     http_exc_400_user_exists,
 )

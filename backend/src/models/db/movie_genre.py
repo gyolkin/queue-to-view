@@ -1,13 +1,18 @@
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column
+from sqlalchemy import Column, ForeignKey, Table
 
 from src.repository.table import Base
 
-
-class MovieGenre(Base):
-    movie_id = mapped_column(
-        ForeignKey("movie.id", ondelete="CASCADE"), primary_key=True
-    )
-    genre_id = mapped_column(
-        ForeignKey("genre.id", ondelete="CASCADE"), primary_key=True
-    )
+movie_genre = Table(
+    "movie_genre",
+    Base.metadata,
+    Column(
+        "movie_id",
+        ForeignKey("movie.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    Column(
+        "genre_id",
+        ForeignKey("genre.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+)
