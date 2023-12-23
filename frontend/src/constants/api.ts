@@ -14,4 +14,9 @@ export const apiMap = {
         base_url: '/movie',
         random: '/random-movie',
     },
+    watchlist: {
+        base_url: '/movie',
+        watch: '/watch',
+        unwatch: '/unwatch',
+    },
 };

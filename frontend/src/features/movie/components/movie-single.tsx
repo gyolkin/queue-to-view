@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Badge } from '@/components';
 import { routerMap } from '@/constants';
 import { joinGenres, type ReadMovie } from '@/features/movie';
+import { WatchlistButton } from '@/features/watchlist/components'
 
 export const MovieSingle = ({ movie }: { movie: ReadMovie }) => {
     return (
@@ -32,8 +33,8 @@ export const MovieSingle = ({ movie }: { movie: ReadMovie }) => {
                 </Link>
             </figure>
 
-            <div className='flex gap-x-3'>
-                <div className='min-w-0'>
+            <div className='flex gap-x-3 justify-between'>
+                <div>
                     <h3 className='mb-1 font-bold text-base leading-tight text-white truncate w-full'>
                         {movie.title}
                     </h3>
@@ -41,6 +42,9 @@ export const MovieSingle = ({ movie }: { movie: ReadMovie }) => {
                         <li>{joinGenres(movie.genres)}</li>
                         <li className='text-accent'>{movie.country}</li>
                     </ul>
+                </div>
+                <div>
+                    <WatchlistButton slug={movie.slug} is_watched={movie.is_watched} />
                 </div>
             </div>
         </div>

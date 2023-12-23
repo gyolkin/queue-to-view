@@ -11,6 +11,7 @@ export const movieApi = baseApi.injectEndpoints({
                 url: movie_base_url,
                 method: 'GET',
             }),
+            providesTags: ['Movie'],
         }),
         singleMovie: build.query<ReadMovie, string>({
             query: (slug) => ({

@@ -21,6 +21,10 @@ export const userSlice = createSlice({
         });
         builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
             state.isAuthenticated = false;
+            authApi.util.resetApiState();
+        });
+        builder.addMatcher(authApi.endpoints.login.matchFulfilled, () => {
+            authApi.util.resetApiState();
         });
     },
 });

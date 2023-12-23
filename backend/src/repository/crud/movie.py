@@ -17,21 +17,20 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
     async def read_all(
         self, session: AsyncSession, user_id: Optional[UUID] = None, hide_watched: bool = False
     ) -> Sequence[Movie]:
-        stmt = select(Movie, self._is_watched_stmt).outerjoin(
+        stmt = select(Movie, self._is_watched_expr).outerjoin(
             WatchList,
             and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
         )
+        if hide_watched:
+            stmt = stmt.where(self._is_watched_expr == False)
 
         query = await session.execute(stmt)
         results = query.unique().all()
 
         movies = []
         for movie, is_watched in results:
-            if hide_watched and not is_watched:
-                movies.append(movie)
-            if not hide_watched:
-                movie.is_watched = is_watched
-                movies.append(movie)
+            movie.is_watched = is_watched
+            movies.append(movie)
         return movies
 
     async def read_one(
@@ -41,7 +40,7 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
         value: Optional[str | int] = None,
         user_id: Optional[UUID] = None,
     ) -> Movie:
-        stmt = select(Movie, self._is_watched_stmt).outerjoin(
+        stmt = select(Movie, self._is_watched_expr).outerjoin(
             WatchList,
             and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
         )
@@ -108,7 +107,7 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
         return db_object
 
     @property
-    def _is_watched_stmt(self) -> Label[Any]:
+    def _is_watched_expr(self) -> Label[Any]:
         return case((WatchList.movie_id != None, True), else_=False).label(
             "is_watched"
         )
