@@ -35,7 +35,7 @@ export const MovieSingle = ({ movie }: { movie: ReadMovie }) => {
 
             <div className='flex gap-x-3 justify-between'>
                 <div>
-                    <h3 className='mb-1 font-bold text-base leading-tight text-white truncate w-full'>
+                    <h3 className='mb-1 font-bold text-base text-white line-clamp-1'>
                         {movie.title}
                     </h3>
                     <ul className='flex flex-col gap-y-1.5 text-sm leading-none font-medium'>

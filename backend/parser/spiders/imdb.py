@@ -1,5 +1,6 @@
-import scrapy
 from parser.items import MovieItem
+
+import scrapy
 
 
 class ImdbSpider(scrapy.Spider):

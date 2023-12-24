@@ -7,9 +7,9 @@ from src.models.db import User
 from src.repository.crud import UserCRUDRepository
 
 
-def get_user_repository(
+async def get_user_repository(
     async_session: SQLAlchemyAsyncSession = Depends(get_async_session),
-) -> UserCRUDRepository:
+):
     """
     Зависимость для получения репозитория пользовательской модели.
 
@@ -22,4 +22,4 @@ def get_user_repository(
         Экземпляр UserCRUDRepository, предоставляющий методы для CRUD-операций с пользователями.
     """
     user_db = SQLAlchemyUserDatabase(async_session, User)
-    return UserCRUDRepository(user_db)
+    yield UserCRUDRepository(user_db)

@@ -19,5 +19,10 @@ RUN pip install --upgrade pip &&\
     pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY ./src /app/src
+COPY ./parser/result/movies.json /app/movies.json
+COPY ./cli /app/cli
+
+RUN echo '#!/bin/sh\npython -m cli "$@"' > /usr/local/bin/qtv
+RUN chmod +x /usr/local/bin/qtv
 
 CMD ["uvicorn", "src.main:backend_app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

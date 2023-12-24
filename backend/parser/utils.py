@@ -1,6 +1,7 @@
-import requests
 import base64
 import re
+
+import requests
 
 
 def convert_image_to_base64(image_url):
