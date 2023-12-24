@@ -1,0 +1,27 @@
+BASE_BACKEND_URL = "http://backend:8000/api"
+
+GENRES = [
+    ("Боевик", "action"),
+    ("Приключения", "adventure"),
+    ("Мультфильм", "animation"),
+    ("Биография", "biography"),
+    ("Комедия", "comedy"),
+    ("Криминал", "crime"),
+    ("Документальный", "documentary"),
+    ("Драма", "drama"),
+    ("Семейный", "family"),
+    ("Фэнтези", "fantasy"),
+    ("Нуар", "noir"),
+    ("Исторический", "history"),
+    ("Ужасы", "horror"),
+    ("Музыкальный", "music"),
+    ("Мюзикл", "musical"),
+    ("Фильм-тайна", "mystery"),
+    ("Романтический", "romance"),
+    ("Sci-Fi", "sci-fi"),
+    ("Короткометражный", "short"),
+    ("Спортивный", "sport"),
+    ("Триллер", "thriller"),
+    ("Военный", "war"),
+    ("Вестерн", "western"),
+]

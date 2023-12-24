@@ -15,14 +15,17 @@ from src.utils.tools import create_image_from_bytes, generate_slug
 
 class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
     async def read_all(
-        self, session: AsyncSession, user_id: Optional[UUID] = None, hide_watched: bool = False
+        self,
+        session: AsyncSession,
+        user_id: Optional[UUID] = None,
+        hide_watched: bool = False,
     ) -> Sequence[Movie]:
         stmt = select(Movie, self._is_watched_expr).outerjoin(
             WatchList,
             and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
         )
         if hide_watched:
-            stmt = stmt.where(self._is_watched_expr == False)
+            stmt = stmt.where(self._is_watched_expr.__eq__(False))
 
         query = await session.execute(stmt)
         results = query.unique().all()
@@ -42,7 +45,10 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
     ) -> Movie:
         stmt = select(Movie, self._is_watched_expr).outerjoin(
             WatchList,
-            and_(Movie.id == WatchList.movie_id, WatchList.user_id == user_id),
+            and_(
+                Movie.id == WatchList.movie_id,
+                WatchList.user_id.__eq__(user_id),
+            ),
         )
 
         if by_field and value:
@@ -108,9 +114,9 @@ class MovieCRUDRepository(BaseCRUDRepository[Movie, MovieCreate, MovieUpdate]):
 
     @property
     def _is_watched_expr(self) -> Label[Any]:
-        return case((WatchList.movie_id != None, True), else_=False).label(
-            "is_watched"
-        )
+        return case(
+            (WatchList.movie_id.__ne__(None), True), else_=False
+        ).label("is_watched")
 
 
 movie_repo: MovieCRUDRepository = MovieCRUDRepository(Movie)

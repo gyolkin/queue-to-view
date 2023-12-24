@@ -36,7 +36,7 @@ async def get_movies(
     db_movies = await movie_repo.read_all(
         session=session,
         user_id=user.id if user else None,
-        hide_watched=hide_watched
+        hide_watched=hide_watched,
     )
     return db_movies
 

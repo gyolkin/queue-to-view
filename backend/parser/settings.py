@@ -13,7 +13,7 @@ ITEM_PIPELINES = {
 }
 
 FEEDS = {
-    f"imdb.json": {"format": "json", "overwrite": True},
+    "result/movies.json": {"format": "json", "overwrite": True},
 }
 
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
@@ -22,7 +22,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 
 LOG_LEVEL = "INFO"
 LOG_FORMAT = "%(levelname)s: %(message)s"
-LOG_FILE = f"logs/past_parse_log.txt"
+LOG_FILE = "logs/past_parse_log.txt"
 LOG_FILE_APPEND = False
 
 DOWNLOAD_DELAY = 3

@@ -1,12 +1,4 @@
-from sqlalchemy import (
-    CheckConstraint,
-    DateTime,
-    Enum,
-    Float,
-    Integer,
-    String,
-    desc,
-)
+from sqlalchemy import CheckConstraint, DateTime, Enum, Float, Integer, String
 from sqlalchemy.orm import mapped_column, relationship
 from sqlalchemy.sql import functions
 
@@ -45,5 +37,4 @@ class Movie(Base, AutoincrementIDMixin):
         ),
         CheckConstraint("duration > 0"),
         CheckConstraint("imdb_rating >= 0.0 AND imdb_rating <= 10.0"),
-        {"order_by": desc(created_at)},
     )

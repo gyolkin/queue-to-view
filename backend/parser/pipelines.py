@@ -1,9 +1,12 @@
 import logging
+from parser.constants import GENRE_TO_ID
+from parser.utils import (
+    convert_country_code,
+    convert_duration_to_minutes,
+    convert_image_to_base64,
+)
 
 from scrapy.exceptions import DropItem
-
-from parser.utils import *
-from parser.constants import GENRE_TO_ID
 
 
 class ParserPipeline:
@@ -17,7 +20,7 @@ class ParserPipeline:
         item["imdb_rating"] = float(item["imdb_rating"])
         item["duration"] = convert_duration_to_minutes(item["duration"])
         item["genres"] = [
-            GENRE_TO_ID.get(i) 
+            GENRE_TO_ID.get(i)
             for i in item["genres"]
             if GENRE_TO_ID.get(i) is not None
         ]
@@ -25,7 +28,7 @@ class ParserPipeline:
         try:
             base64_image = convert_image_to_base64(item["poster"])
             item["poster"] = base64_image
-        except:
+        except Exception:
             logging.warning(
                 "Ошибка конвертации изображения. Изображение не сохранено."
             )
