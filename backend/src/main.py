@@ -40,7 +40,7 @@ def initialize_backend_application() -> FastAPI:
     app.add_exception_handler(
         RequestValidationError, validation_exception_handler
     )
-    app.include_router(router=router, prefix=settings.API_PREFIX)
+    app.include_router(router=router, prefix="/api")
     app.openapi = lambda: custom_openapi(app)
     return app
 

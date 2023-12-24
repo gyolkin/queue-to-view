@@ -35,6 +35,17 @@ services:
     depends_on:
       - backend
 
+  ngrok:
+    image: ngrok/ngrok:alpine 
+    container_name: ngrok
+    profiles:
+      - "host"
+    command: http host.docker.internal:80 --domain=${SERVER_HOST} --host-header=127.0.0.1
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
+
 volumes:
   postgres_data:
   static_value:

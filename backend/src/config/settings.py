@@ -12,28 +12,23 @@ class BackendSettings(BaseSettings):
     )
 
     # APPLICATION
-    HOST: str = "http://127.0.0.1"
+    SERVER_HOST: str = "127.0.0.1"
+    SERVER_PROTO: str = "http"
     STATIC_FOLDER: str = "static"
     SECRET_KEY: str = "secret_key"
-    INCLUDE_PARSER: bool = False
-    TITLE: str = "Default Title"
     VERSION: str = "0.1.0"
-    DESCRIPTION: str = "No description."
     DEBUG: bool = True
-    DOCS_URL: str = "/docs"
-    API_PREFIX: str = "/api"
 
     # AUTHENTICATION
-    JWT_LIFETIME: int = 60 * 60 * 24 * 7
-    AUTH_COOKIE_NAME: str = "jwt_token"
+    JWT_LIFETIME: int = 60 * 60 * 24 * 7  # неделя
     PASSWORD_MIN_LENGTH: int = 5
-    REGISTER_VERIFICATION: bool = False
+    REGISTER_VERIFICATION: bool = False  # пока не трогать
 
     # DATABASE
     POSTGRES_DB: str = "postgres"
     POSTGRES_PASSWORD: str = "postgres"
     POSTGRES_PORT: int = 5432
-    POSTGRES_SCHEMA: str = "postgresql"
+    POSTGRES_SCHEMA: str = "postgresql+asyncpg"
     POSTGRES_USERNAME: str = "postgres"
     POSTGRES_HOST: str = "db"
 
@@ -48,12 +43,9 @@ class BackendSettings(BaseSettings):
     @property
     def set_backend_app_attributes(self) -> dict[str, Optional[str | bool]]:
         return {
-            "title": self.TITLE,
+            "title": "Queue to View",
             "version": self.VERSION,
             "debug": self.DEBUG,
-            "description": self.DESCRIPTION,
-            "docs_url": self.DOCS_URL,
-            "api_prefix": self.API_PREFIX,
         }
 
     @property
@@ -71,4 +63,6 @@ class BackendSettings(BaseSettings):
 
     @property
     def get_static_folder_url(self) -> str:
-        return "{}/{}".format(self.HOST, self.STATIC_FOLDER)
+        return "{}://{}/{}".format(
+            self.SERVER_PROTO, self.SERVER_HOST, self.STATIC_FOLDER
+        )

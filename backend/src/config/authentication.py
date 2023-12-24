@@ -57,7 +57,7 @@ def get_jwt_strategy() -> JWTStrategy:
 
 
 cookie_transport = CustomCookieTransport(
-    cookie_name=settings.AUTH_COOKIE_NAME, cookie_max_age=settings.JWT_LIFETIME
+    cookie_name="jwt_token", cookie_max_age=settings.JWT_LIFETIME
 )
 jwt_strategy = get_jwt_strategy
 
